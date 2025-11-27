@@ -121,32 +121,6 @@ class Zombie:
         self.loc_no = (self.loc_no + 1) % len(self.patrol_locations)
         return BehaviorTree.SUCCESS
 
-    def has_less_balls_than_boy(self):
-        """좀비의 공 개수가 소년보다 적은지 체크"""
-        if self.ball_count < common.boy.ball_count:
-            return BehaviorTree.SUCCESS
-        else:
-            return BehaviorTree.FAIL
-
-    def has_more_or_equal_balls_than_boy(self):
-        if self.ball_count >= common.boy.ball_count:
-            return BehaviorTree.SUCCESS
-        else:
-            return BehaviorTree.FAIL
-
-    def run_away_from_boy(self, r=0.5):
-        self.state = 'Walk'
-        escape_dir = math.atan2(self.y - common.boy.y, self.x - common.boy.x)
-        distance = RUN_SPEED_PPS * game_framework.frame_time
-        self.x += distance * math.cos(escape_dir)
-        self.y += distance * math.sin(escape_dir)
-        self.dir = escape_dir
-
-        if not self.distance_less_than(self.x, self.y, common.boy.x, common.boy.y, 7):
-            return BehaviorTree.SUCCESS
-        else:
-            return BehaviorTree.RUNNING
-
     def build_behavior_tree(self):
         a1 = Action('목표 지점 설정', self.set_target_location, 800, 800)
         a2 = Action('목표 지점으로 이동', self.move_to, 0.5)
