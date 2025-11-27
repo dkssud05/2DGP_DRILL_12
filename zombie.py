@@ -121,6 +121,12 @@ class Zombie:
         self.loc_no = (self.loc_no + 1) % len(self.patrol_locations)
         return BehaviorTree.SUCCESS
 
+    def has_less_balls_than_boy(self):
+        if self.ball_count < common.boy.ball_count:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
     def build_behavior_tree(self):
         a1 = Action('목표 지점 설정', self.set_target_location, 800, 800)
         a2 = Action('목표 지점으로 이동', self.move_to, 0.5)
