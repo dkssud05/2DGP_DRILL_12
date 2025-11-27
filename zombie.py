@@ -163,6 +163,5 @@ class Zombie:
         a5 = Action('다음 순찰 위치를 가져오기', self.get_patrol_location)
         patrol = Sequence('순찰', a5, a2)
 
-        # 최종 루트: 추격 > 도망 > 순찰 순서로 우선순위
         root = Selector('소년 추적/도망 또는 순찰', chase_boy, run_away, patrol)
         self.bt = BehaviorTree(root)
