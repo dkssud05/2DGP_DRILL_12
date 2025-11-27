@@ -127,6 +127,19 @@ class Zombie:
         else:
             return BehaviorTree.FAIL
 
+    def run_away_from_boy(self, r=0.5):
+        self.state = 'Walk'
+        escape_dir = math.atan2(self.y - common.boy.y, self.x - common.boy.x)
+        distance = RUN_SPEED_PPS * game_framework.frame_time
+        self.x += distance * math.cos(escape_dir)
+        self.y += distance * math.sin(escape_dir)
+        self.dir = escape_dir
+
+        if not self.distance_less_than(self.x, self.y, common.boy.x, common.boy.y, 7):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
     def build_behavior_tree(self):
         a1 = Action('목표 지점 설정', self.set_target_location, 800, 800)
         a2 = Action('목표 지점으로 이동', self.move_to, 0.5)
