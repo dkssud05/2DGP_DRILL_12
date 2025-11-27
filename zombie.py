@@ -150,8 +150,19 @@ class Zombie:
 
         c1 = Condition('소년이 근처에 있는가', self.if_boy_nearby, 7)
 
+        c2 = Condition('소년보다 공이 적은가?', self.has_less_balls_than_boy)
+        c3 = Condition('소년보다 공이 많거나 같은가?', self.has_more_or_equal_balls_than_boy)
+
         a4 = Action('소년 추적', self.move_to_boy, 0.5)
+        a6 = Action('소년으로부터 도망', self.run_away_from_boy, 0.5)
+
+        chase_boy = Sequence('공이 많으면 소년 추격', c1, c3, a4)
+
+        run_away = Sequence('공이 적으면 도망', c1, c2, a6)
 
         a5 = Action('다음 순찰 위치를 가져오기', self.get_patrol_location)
         patrol = Sequence('순찰', a5, a2)
+
+        # 최종 루트: 추격 > 도망 > 순찰 순서로 우선순위
+        root = Selector('소년 추적/도망 또는 순찰', chase_boy, run_away, patrol)
         self.bt = BehaviorTree(root)
